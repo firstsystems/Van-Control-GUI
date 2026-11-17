@@ -1,0 +1,52 @@
+# Van Control GUI settings
+
+[serial]
+# Leave empty to pick the first /dev/cu.usbserial-* or /dev/cu.usbmodem-* port.
+port = ""
+poll_interval_s = 1.0
+
+# Friendly names for the outputs. Key = name the firmware uses.
+# Outputs not listed here are shown with their firmware name.
+[labels]
+"BLK7-5"  = "BLK7-5"
+"BLK6-3"  = "BLK6-3"
+"BLK4-3"  = "BLK4-3"
+"BLK4-15" = "BLK4-15"
+"BLK4-9"  = "BLK4-9"
+"BLK4-6"  = "BLK4-6"
+"12V_HS2" = "12V HS2"
+"12V_HS1" = "12V HS1"
+
+# The momentary button: sends <output>_TOGGLE, same as pressing PB5.
+[toggle_button]
+output = "BLK4-3"
+label = "PB5 toggle"
+
+# Analogue scaling. The firmware reports mV at the MCU pin (0-3300).
+#   kind = "divider": value = pin volts x ratio   (ratio = input V / pin V)
+#   kind = "linear":  value = (pin mV - offset_mV) / mV_per_unit
+#
+# PLACEHOLDERS - replace with the real divider ratios and sensor details.
+# With ratio = 1.0 the battery readings show volts at the pin, not at the battery.
+[analog.VLB]
+label = "Leisure battery"
+unit = "V"
+decimals = 2
+kind = "divider"
+ratio = 1.0
+
+[analog.VSB]
+label = "Starter battery"
+unit = "V"
+decimals = 2
+kind = "divider"
+ratio = 1.0
+
+# Assumes a TMP36-style sensor (500 mV at 0 °C, 10 mV/°C).
+[analog.TEMP]
+label = "Temperature"
+unit = "°C"
+decimals = 1
+kind = "linear"
+offset_mV = 500
+mV_per_unit = 10
