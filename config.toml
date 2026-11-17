@@ -5,17 +5,17 @@
 port = ""
 poll_interval_s = 1.0
 
-# Friendly names for the outputs. Key = name the firmware uses.
-# Outputs not listed here are shown with their firmware name.
+# Function names for the outputs. Key = name the firmware uses (connector pin).
+# Shown as "PUMP (BLK7-5)". Outputs not listed here show just the pin name.
 [labels]
-"BLK7-5"  = "BLK7-5"
-"BLK6-3"  = "BLK6-3"
-"BLK4-3"  = "BLK4-3"
-"BLK4-15" = "BLK4-15"
-"BLK4-9"  = "BLK4-9"
-"BLK4-6"  = "BLK4-6"
-"12V_HS2" = "12V HS2"
-"12V_HS1" = "12V HS1"
+"BLK7-5"  = "PUMP"
+"BLK6-3"  = "SPARE"
+"BLK4-3"  = "OUTSIDE"
+"BLK4-15" = "LIGHT3"
+"BLK4-9"  = "LIGHT2"
+"BLK4-6"  = "LIGHT1"
+"12V_HS1" = "CRITICAL"
+"12V_HS2" = "NON_CRITICAL"
 
 # The momentary button: sends <output>_TOGGLE, same as pressing PB5.
 [toggle_button]

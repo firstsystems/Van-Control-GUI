@@ -14,15 +14,21 @@ from .protocol import Analog, Output
 
 STALE_S = 3.0
 
-BG = "#eef0f3"
-CARD = "#ffffff"
-TEXT = "#1d2330"
-MUTED = "#6b7280"
-ON = "#2e9d5b"
-OFF = "#c3c8d1"
-PENDING = "#e0a526"
-UNKNOWN = "#e3e6eb"
-STATUS_COLOURS = {"ok": ON, "waiting": PENDING, "closed": "#c94040"}
+# Dark, high-contrast palette. The "clam" theme is used so these colours hold
+# when the window is not focused (the macOS native theme greys text out then).
+BG = "#1b1f27"
+CARD = "#272c36"
+FIELD = "#323844"
+BORDER = "#454c5a"
+TEXT = "#f2f4f7"
+MUTED = "#a9b1be"
+DISABLED = "#6f7785"
+ACCENT = "#3d7be0"
+ON = "#34c26b"
+OFF = "#5b6372"
+PENDING = "#f0b429"
+UNKNOWN = "#3a404c"
+STATUS_COLOURS = {"ok": ON, "waiting": PENDING, "closed": "#e5534b"}
 STATUS_TEXT = {"ok": "Connected", "waiting": "Waiting for controller", "closed": "Disconnected"}
 
 
@@ -84,8 +90,27 @@ class App:
         root.protocol("WM_DELETE_WINDOW", self._quit)
 
         style = ttk.Style(root)
+        style.theme_use("clam")
+        style.configure(".", background=BG, foreground=TEXT, bordercolor=BORDER,
+                        lightcolor=BORDER, darkcolor=BORDER, troughcolor=FIELD,
+                        focuscolor=ACCENT, selectbackground=ACCENT, selectforeground=TEXT)
+        style.map(".", foreground=[("disabled", DISABLED)])
         style.configure("TFrame", background=BG)
         style.configure("TLabel", background=BG, foreground=TEXT)
+        style.configure("TButton", background=FIELD, foreground=TEXT, padding=(8, 3))
+        style.map("TButton",
+                  background=[("disabled", CARD), ("pressed", ACCENT), ("active", BORDER)],
+                  foreground=[("disabled", DISABLED)])
+        style.configure("TCombobox", fieldbackground=FIELD, background=FIELD,
+                        foreground=TEXT, arrowcolor=TEXT, insertcolor=TEXT)
+        style.map("TCombobox",
+                  fieldbackground=[("disabled", CARD), ("readonly", FIELD)],
+                  foreground=[("disabled", MUTED)],
+                  arrowcolor=[("disabled", DISABLED)])
+        root.option_add("*TCombobox*Listbox.background", FIELD)
+        root.option_add("*TCombobox*Listbox.foreground", TEXT)
+        root.option_add("*TCombobox*Listbox.selectBackground", ACCENT)
+        root.option_add("*TCombobox*Listbox.selectForeground", TEXT)
         style.configure("Card.TFrame", background=CARD)
         style.configure("Card.TLabel", background=CARD, foreground=TEXT)
         style.configure("Muted.TLabel", background=CARD, foreground=MUTED, font=("TkDefaultFont", 11))
@@ -159,23 +184,26 @@ class App:
         ttk.Frame(card, style="Card.TFrame", height=14).pack()
         self.toggle_btn = ttk.Button(
             card, style="Toggle.TButton",
-            text=f"{self.cfg.toggle_label}  ({self.cfg.labels.get(self.cfg.toggle_output, self.cfg.toggle_output)})",
+            text=f"{self.cfg.toggle_label}  –  {self._output_label(self.cfg.toggle_output)}",
             command=lambda: self.link.send(f"{self.cfg.toggle_output}_TOGGLE"))
         self.toggle_btn.pack(fill="x")
 
     def _add_output_row(self, name: str) -> None:
         self.outputs_hint.grid_remove()
         row = len(self.outputs)
-        label = self.cfg.labels.get(name, name)
         frame = self.outputs_frame
-        ttk.Label(frame, text=label, style="Card.TLabel").grid(row=row, column=0, sticky="w", pady=4)
-        ttk.Label(frame, text=name if label != name else "", style="Muted.TLabel").grid(
-            row=row, column=1, sticky="e", padx=(8, 10))
+        ttk.Label(frame, text=self._output_label(name), style="Card.TLabel").grid(
+            row=row, column=0, sticky="w", pady=4)
         state_lbl = ttk.Label(frame, text="", width=4, style="Muted.TLabel")
         state_lbl.grid(row=row, column=2, sticky="e", padx=(0, 8))
         switch = Switch(frame, command=lambda n=name: self._on_switch(n))
         switch.grid(row=row, column=3, sticky="e")
         self.outputs[name] = {"switch": switch, "state_lbl": state_lbl, "on": None}
+
+    def _output_label(self, name: str) -> str:
+        """'PUMP (BLK7-5)', or just the pin name if no function name is configured."""
+        label = self.cfg.labels.get(name, name)
+        return f"{label} ({name})" if label != name else name
 
     def _build_analog(self, body) -> None:
         card = self._card(body, 1, "Analogue inputs")

@@ -44,7 +44,7 @@ On start-up the app connects to `port` from `config.toml`. If that is empty, it 
 ## Configuration: `config.toml`
 
 - `[serial]`: the port (empty means auto-detect) and the poll interval.
-- `[labels]`: friendly names for outputs, for example `"BLK7-5" = "Water pump"`. Output names and order come from the board, so if the firmware renames an output, the GUI still works. Only the label needs updating.
+- `[labels]`: function names for outputs, for example `"BLK7-5" = "PUMP"`, shown as "PUMP (BLK7-5)". Output names and order come from the board, so if the firmware renames an output, the GUI still works. Only the label needs updating.
 - `[toggle_button]`: which output the momentary button toggles, and its label.
 - `[analog.*]`: converts the board's raw pin millivolts into real units.
   - `kind = "divider"`: volts = pin volts × `ratio`. Set `ratio` to (battery volts ÷ pin volts) for that input's resistor divider.
