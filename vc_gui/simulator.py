@@ -15,13 +15,14 @@ POWER_ON = [
     ("BLK7-5", True), ("BLK6-3", False), ("BLK4-3", False), ("BLK4-15", True),
     ("BLK4-9", True), ("BLK4-6", True), ("12V_HS2", True), ("12V_HS1", True),
 ]
-ANALOG_MV = {"VLB": 2874, "VSB": 2810, "TEMP": 742}
+# Firmware 1.1+: VLB/VSB are calibrated battery mV, TEMP is mV at the pin.
+ANALOG_MV = {"VLB": 12800, "VSB": 12650, "TEMP": 742}
 CMD_MAX = 23
 
 
 class SimulatedController:
     def __init__(self, port: str | None = None, timeout: float = 0.02,
-                 version: str = "1.0") -> None:
+                 version: str = "1.1") -> None:
         self.timeout = timeout
         self.version = version
         self.is_open = True

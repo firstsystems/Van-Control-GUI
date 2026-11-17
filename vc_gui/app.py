@@ -303,7 +303,7 @@ class App:
                 ch = row["channel"]
                 row["value"].configure(text=f"{ch.convert(msg.mv):.{ch.decimals}f} {ch.unit}",
                                        foreground=TEXT)
-                row["raw"].configure(text=f"{msg.mv} mV at pin")
+                row["raw"].configure(text=f"{msg.mv} mV reported")
                 row["t"] = ev.t
         elif isinstance(ev, SentEvent):
             name = ev.command.rsplit("_", 1)[0]

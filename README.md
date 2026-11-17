@@ -46,11 +46,13 @@ On start-up the app connects to `port` from `config.toml`. If that is empty, it 
 - `[serial]`: the port (empty means auto-detect) and the poll interval.
 - `[labels]`: function names for outputs, for example `"BLK7-5" = "PUMP"`, shown as "PUMP (BLK7-5)". Output names and order come from the board, so if the firmware renames an output, the GUI still works. Only the label needs updating.
 - `[toggle_button]`: which output the momentary button toggles, and its label.
-- `[analog.*]`: converts the board's raw pin millivolts into real units.
-  - `kind = "divider"`: volts = pin volts × `ratio`. Set `ratio` to (battery volts ÷ pin volts) for that input's resistor divider.
-  - `kind = "linear"`: value = (pin mV − `offset_mV`) ÷ `mV_per_unit`.
+- `[analog.*]`: converts the board's millivolt readings into real units.
+  - `kind = "divider"`: volts = reported volts × `ratio`.
+  - `kind = "linear"`: value = (reported mV − `offset_mV`) ÷ `mV_per_unit`.
 
-> **The analogue scaling values are placeholders.** The battery ratios are 1.0, so the battery readings show volts at the pin, not at the battery. The temperature assumes a TMP36-style sensor (500 mV at 0 °C, 10 mV/°C). Replace them with the real divider ratios and sensor details.
+> **Battery readings are calibrated in the firmware** (version 1.1 and later), so `VLB` and `VSB` arrive as battery millivolts and their `ratio` stays 1.0. Recalibrate in the firmware, not here. With firmware 1.0 the batteries show the pin voltage instead.
+>
+> **The temperature scaling is a placeholder.** It assumes a TMP36-style sensor (500 mV at 0 °C, 10 mV/°C), reading the pin voltage. Replace it with the real sensor details.
 
 ## How it works
 

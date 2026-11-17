@@ -44,7 +44,7 @@ def output_value(ev, name):
 def test_reset_banner_and_power_on_states(board_and_link):
     _board, link = board_and_link
     seen = wait_for(link, lambda ev: isinstance(ev, StatusEvent) and ev.state == "ok")
-    assert any(isinstance(ev, ResetEvent) and ev.version == "1.0" for ev in seen)
+    assert any(isinstance(ev, ResetEvent) and ev.version == "1.1" for ev in seen)
     states = {ev.message.name: ev.message.on for ev in seen
               if isinstance(ev, ValueEvent) and isinstance(ev.message, Output)}
     assert states == dict(POWER_ON)

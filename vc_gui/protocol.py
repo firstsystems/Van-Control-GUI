@@ -25,7 +25,8 @@ class Output:
 
 @dataclass(frozen=True)
 class Analog:
-    """One analogue reading in millivolts at the MCU pin (VLB, VSB or TEMP)."""
+    """One analogue reading in millivolts: battery mV for VLB/VSB (calibrated in
+    firmware 1.1+), pin mV for TEMP."""
     name: str
     mv: int
 

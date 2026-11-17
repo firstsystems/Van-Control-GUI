@@ -22,12 +22,12 @@ poll_interval_s = 1.0
 output = "BLK4-3"
 label = "PB5 toggle"
 
-# Analogue scaling. The firmware reports mV at the MCU pin (0-3300).
-#   kind = "divider": value = pin volts x ratio   (ratio = input V / pin V)
-#   kind = "linear":  value = (pin mV - offset_mV) / mV_per_unit
+# Analogue scaling. Firmware 1.1+ reports VLB and VSB as battery mV, already
+# calibrated, so their ratio stays 1.0. TEMP is still mV at the MCU pin (0-3300).
+#   kind = "divider": value = reported volts x ratio
+#   kind = "linear":  value = (reported mV - offset_mV) / mV_per_unit
 #
-# PLACEHOLDERS - replace with the real divider ratios and sensor details.
-# With ratio = 1.0 the battery readings show volts at the pin, not at the battery.
+# The temperature settings are PLACEHOLDERS - replace with the real sensor details.
 [analog.VLB]
 label = "Leisure battery"
 unit = "V"
