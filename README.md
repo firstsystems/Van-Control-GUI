@@ -41,6 +41,29 @@ On start-up the app connects to `port` from `config.toml`. If that is empty, it 
 | Grey analogue value | No new reading for over 3 s |
 | Status dot | Green: connected. Amber: port open but the board isn't replying. Red: disconnected. |
 
+### Buttons and the commands they send
+
+Each switch is labelled with its function name and, in brackets, the output's connector pin name. The command sent uses the pin name, which is the name the firmware knows. Turning a switch on sends `<PIN>_ON`, and turning it off sends `<PIN>_OFF`.
+
+| Switch | Pin name | Switch on | Switch off |
+|---|---|---|---|
+| PUMP | `BLK7-5` | `BLK7-5_ON` | `BLK7-5_OFF` |
+| SPARE | `BLK6-3` | `BLK6-3_ON` | `BLK6-3_OFF` |
+| OUTSIDE | `BLK4-3` | `BLK4-3_ON` | `BLK4-3_OFF` |
+| LIGHT3 | `BLK4-15` | `BLK4-15_ON` | `BLK4-15_OFF` |
+| LIGHT2 | `BLK4-9` | `BLK4-9_ON` | `BLK4-9_OFF` |
+| LIGHT1 | `BLK4-6` | `BLK4-6_ON` | `BLK4-6_OFF` |
+| CRITICAL | `12V_HS1` | `12V_HS1_ON` | `12V_HS1_OFF` |
+| NON_CRITICAL | `12V_HS2` | `12V_HS2_ON` | `12V_HS2_OFF` |
+
+| Button | Command |
+|---|---|
+| PB5 toggle – OUTSIDE (BLK4-3) | `BLK4-3_TOGGLE` (inverts the output, same as pressing PB5 on the board) |
+
+The function names come from `[labels]` in `config.toml`, and the toggle button's output from `[toggle_button]`. If you change those, the commands follow the pin names, not the labels.
+
+Every poll also sends `READ_ALL`, `READ_VLB`, `READ_VSB` and `READ_TEMP` to read the output states and analogue values.
+
 ## Configuration: `config.toml`
 
 - `[serial]`: the port (empty means auto-detect) and the poll interval.
